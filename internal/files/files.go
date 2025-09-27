@@ -1,4 +1,4 @@
-package task
+package files
 
 import (
 	"encoding/json"
@@ -13,21 +13,50 @@ const (
 	appName         = "TaskTracker-CLI"
 )
 
-func saveToFile(file io.WriteCloser, tasks []task) error {
+func SaveToFile[T ~[]E, E any](data T) error {
+	saveFile, err := openOrCreateSaveFile()
+
+	if err != nil {
+		return err
+	}
+
+	return saveToFile(saveFile, data)
+}
+
+func GetFromFile[T ~[]E, E any]() (T, error) {
+	saveFile, err := openOrCreateSaveFile()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return getFromFile[T](saveFile)
+}
+
+func saveToFile[T ~[]E, E any](file io.WriteCloser, data T) error {
 	defer file.Close()
 
 	encoder := json.NewEncoder(file)
 	encoder.SetIndent("", "  ")
-	return encoder.Encode(tasks)
+	return encoder.Encode(data)
 }
 
-func getFromFile(file io.ReadCloser) ([]task, error) {
+func getFromFile[T ~[]E, E any](file io.ReadCloser) (T, error) {
 	defer file.Close()
 
-	var tasks []task
+	var data T
 	decoder := json.NewDecoder(file)
-	err := decoder.Decode(&tasks)
-	return tasks, err
+	err := decoder.Decode(&data)
+
+	if err == io.EOF {
+		err = nil
+
+		if data == nil {
+			data = make(T, 0)
+		}
+	}
+
+	return data, err
 }
 
 func ensureSaveDirExists() error {

@@ -1,41 +1,26 @@
-package task
+package tasks
 
 import (
+	domain "github.com/Lexv0lk/TaskTracker-CLI/internal/domain/tasks"
 	"sort"
 	"time"
 )
-
-type status int
-
-const (
-	todo status = iota
-	inProgress
-	done
-)
-
-type task struct {
-	Id            int
-	Description   string
-	CurrentStatus status
-	CreatedAt     time.Time
-	UpdatedAt     time.Time
-}
 
 func AddTask(description string) error {
 	return addTask(defaultTaskStorage, description, time.Now)
 }
 
-func addTask(taskStorage TaskStorage, description string, now func() time.Time) error {
-	tasks, err := taskStorage.Load[[]task]()
+func addTask(taskStorage domain.TaskStorage, description string, now func() time.Time) error {
+	tasks, err := taskStorage.Load()
 
 	if err != nil {
 		return err
 	}
 
-	newTask := task{
+	newTask := domain.Task{
 		Id:            getNextId(tasks),
 		Description:   description,
-		CurrentStatus: todo,
+		CurrentStatus: domain.Todo,
 		CreatedAt:     now(),
 		UpdatedAt:     now(),
 	}
@@ -44,7 +29,7 @@ func addTask(taskStorage TaskStorage, description string, now func() time.Time) 
 	return taskStorage.Save(tasks)
 }
 
-func getNextId(tasks []task) int {
+func getNextId(tasks []domain.Task) int {
 	if len(tasks) == 0 {
 		return 1
 	}

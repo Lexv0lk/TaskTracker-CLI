@@ -83,6 +83,7 @@ func TestSaveToFile(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			err := saveToFile(tt.writeCloserFn(t, tt.tasks), tt.tasks)
 
@@ -168,6 +169,7 @@ func TestGetFromFile(t *testing.T) {
 	}
 
 	for _, tt := range tests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			tasks, err := getFromFile[[]mocks2.TaskMock](tt.readCloserFn(t, tt.expectedTasks))
 

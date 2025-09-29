@@ -10,6 +10,12 @@ const (
 	Done
 )
 
+const (
+	TodoStr       = "To Do"
+	InProgressStr = "In Progress"
+	DoneStr       = "Done"
+)
+
 type Task struct {
 	Id            int
 	Description   string

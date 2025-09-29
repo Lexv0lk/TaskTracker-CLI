@@ -1,5 +1,3 @@
-[![GitHub - lakshay1341/Task-Tracker: Task Tracker CLI is a command-line interface application designed to help you manage your tasks efficiently. This project allows you to add, update, delete, and list tasks, storing them in a JSON file for persistence.](https://images.openai.com/thumbnails/url/JDPGG3icu1mUUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw4u8nMzdCpINyuqMMh0MU739owqLvKyiAh1zPXPi3QNc0zMzkkO8S1PLKnwNPMpM83zcAuOTDJ2NfdQKwYAweco4g)](https://github.com/lakshay1341/Task-Tracker?utm_source=chatgpt.com)
-
 # TaskTracker-CLI
 
 TaskTracker-CLI is a command-line application developed in Go to help you efficiently manage your tasks. It allows you to add, update, delete, and list tasks, storing them in a JSON file for persistence.

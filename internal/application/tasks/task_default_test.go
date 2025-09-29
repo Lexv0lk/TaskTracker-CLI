@@ -7,6 +7,7 @@ import (
 	domain "github.com/Lexv0lk/TaskTracker-CLI/internal/domain/tasks"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
+	"strings"
 	"testing"
 	"time"
 )
@@ -109,7 +110,7 @@ func TestAddTask(t *testing.T) {
 			t.Parallel()
 
 			taskStorage := tt.testStorageFn(t, tt.addingTask)
-			err := addTask(taskStorage, tt.addingTask.Description, func() time.Time {
+			task, err := addTask(taskStorage, tt.addingTask.Description, func() time.Time {
 				return tt.addingTask.CreatedAt
 			})
 
@@ -117,6 +118,7 @@ func TestAddTask(t *testing.T) {
 				assert.EqualError(t, err, tt.expectedErr.Error())
 			} else {
 				assert.NoError(t, err)
+				assert.Equal(t, tt.addingTask, task)
 			}
 		})
 	}
@@ -738,6 +740,70 @@ func TestGetFilteredTasksList(t *testing.T) {
 			} else {
 				assert.NoError(t, err)
 				assert.Equal(t, tt.expectedOut, out)
+			}
+		})
+	}
+}
+
+func TestParseStatusString(t *testing.T) {
+	t.Parallel()
+
+	type testCase struct {
+		name        string
+		input       string
+		expected    domain.Status
+		expectedErr error
+	}
+
+	tests := []testCase{
+		{
+			name:     "Todo lower case",
+			input:    domain.TodoStr,
+			expected: domain.Todo,
+		},
+		{
+			name:     "InProgress lower case with dash",
+			input:    domain.InProgressStr,
+			expected: domain.InProgress,
+		},
+		{
+			name:     "Done lower case",
+			input:    domain.DoneStr,
+			expected: domain.Done,
+		},
+		{
+			name:     "Todo upper case",
+			input:    strings.ToUpper(domain.TodoStr),
+			expected: domain.Todo,
+		},
+		{
+			name:     "InProgress mixed case",
+			input:    "In-PrOgReSs",
+			expected: domain.InProgress,
+		},
+		{
+			name:        "Unknown string",
+			input:       domain.UnknownStr,
+			expectedErr: fmt.Errorf("invalid status string: %s", domain.UnknownStr),
+		},
+		{
+			name:        "Empty string",
+			input:       "",
+			expectedErr: fmt.Errorf("invalid status string: %s", ""),
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got, err := ParseStatusString(tt.input)
+			if tt.expectedErr != nil {
+				assert.EqualError(t, err, tt.expectedErr.Error())
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.expected, got)
 			}
 		})
 	}

@@ -1,5 +1,5 @@
 /*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
+Copyright © 2025 LEXVOLK
 */
 package cmd
 
@@ -12,16 +12,11 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "TaskTracker",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	Short: "A simple command-line task manager that stores tasks in a JSON file.",
+	Long: `This is a command-line task management application designed to help users organize and track their tasks efficiently. 
+The application stores all tasks in a JSON file, making it lightweight and easy to use without requiring a database.
+Users can perform essential task operations directly from the command line, including adding new tasks, updating existing ones, deleting tasks, and changing task statuses to “in progress” or “done.” The application also provides flexible listing options, allowing users to view all tasks, only completed tasks, only pending tasks, or tasks currently in progress.
+With simple arguments and commands, this CLI tool is perfect for anyone who wants a fast, lightweight, and easy-to-use task manager without leaving the terminal.`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

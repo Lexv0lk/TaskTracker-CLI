@@ -1,0 +1,46 @@
+/*
+Copyright © 2025 LEXVOLK
+*/
+package cmd
+
+import (
+	"fmt"
+	"github.com/Lexv0lk/TaskTracker-CLI/internal/application/tasks"
+	taskdomain "github.com/Lexv0lk/TaskTracker-CLI/internal/domain/tasks"
+	"github.com/spf13/cobra"
+)
+
+// markInProgressCmd represents the markInProgress command
+var markInProgressCmd = &cobra.Command{
+	Use:   "mark-in-progress",
+	Short: "Mark a task as in progress",
+	Long: `Change the status of a task to "in progress".
+This is useful to track tasks that are currently being worked on.
+
+Example usage:
+  task-cli mark-in-progress 1`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) != 1 {
+			cmd.Println("Error: Only Task ID is required.")
+			return
+		}
+
+		var id int
+		_, err := fmt.Sscanf(args[0], "%d", &id)
+		if err != nil {
+			cmd.Println("Error: Invalid task ID format.")
+			return
+		}
+
+		err = tasks.UpdateTaskStatus(id, taskdomain.InProgress)
+		if err != nil {
+			cmd.Printf("Error: %s\n", err.Error())
+		} else {
+			cmd.Println("Task marked as in progress successfully.")
+		}
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(markInProgressCmd)
+}
